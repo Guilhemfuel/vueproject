@@ -1,15 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import FormGame from '@/components/FormGame'
+import FormPlayer from '@/components/FormPlayer'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    }
+    { path: '/', name: 'FormGame', component: FormGame },
+    { path: '/Player', name: 'FormPlayer', component: FormPlayer }
   ]
 })

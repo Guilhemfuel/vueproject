@@ -2,22 +2,21 @@
   <div id="app">
     <img src="./assets/logo.png">
     <router-view/>
-    <input-game/>
   </div>
 </template>
 
 <script>
-import InputGame from './components/Input.vue'
+import FormGame from './components/FormGame.vue'
 
 export default {
   components: {
-    InputGame
+    FormGame
   },
   name: 'App'
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -25,5 +24,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.form {
+  padding: 0px;
 }
 </style>

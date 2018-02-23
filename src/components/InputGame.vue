@@ -1,5 +1,5 @@
 <template>
-    <input type="text" class="input" maxlength="4" v-model="message">
+    <input type="text" class="input" maxlength="4" v-model="message" placeholder="CODE PARTIE">
 </template>
 
 <script>
@@ -24,8 +24,8 @@ export default {
         border-bottom: 1px solid #383838;
         background-color: #42a2ff;
         color: #383838;
-        font-size: 22px;
-        padding: 10px;
+        font-size: 21px;
+        padding: 6px;
     }
 
     .input:focus {
