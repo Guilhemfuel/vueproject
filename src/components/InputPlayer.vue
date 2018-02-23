@@ -22,7 +22,6 @@ export default {
     .input {
         border: none;
         border-bottom: 1px solid #383838;
-        background-color: #42a2ff;
         color: #383838;
         font-size: 21px;
         padding: 6px;

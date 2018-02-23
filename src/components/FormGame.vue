@@ -2,8 +2,8 @@
   <div id="FormPlayer">
     <input type="text" class="input" maxlength="4" v-model="inputvalue" placeholder="CODE PARTIE">
     <SubmitForm v-on:click.native="setData(inputvalue)"/>
-    <p>Le bout a été cliqué {{ counter }}</p>
     <p>{{ getData }}</p>
+    <p>{{ getIfGameExist }}</p>
   </div>
 </template>
 
@@ -15,7 +15,6 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
   data () {
     return {
-      counter: 0,
       inputvalue: ''
     }
   },
@@ -23,8 +22,9 @@ export default {
     InputGame, SubmitForm
   },
   methods: {
-    callcoucou () {
+    test () {
       console.log(this.$store.getters.getData)
+      this.$router.push('Player')
     },
     ...mapActions({
       setData: 'codegame/setData'
@@ -32,12 +32,36 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getData: 'codegame/getData'
+      getData: 'codegame/getData',
+      getIfGameExist: 'codegame/getIfGameExist'
     })
+  },
+  watch: {
+    getIfGameExist () {
+      if (this.getIfGameExist) {
+        this.$router.push('Player')
+      }
+    }
   },
   name: 'FormGame'
 }
 </script>
 
 <style scoped>
+  .input {
+    border: none;
+    border-bottom: 1px solid #383838;
+    color: #383838;
+    font-size: 21px;
+    padding: 6px;
+    text-transform: uppercase;
+  }
+
+  .input:focus {
+    outline: none;
+  }
+
+  .input::placeholder {
+    color: #383838;
+  }
 </style>
