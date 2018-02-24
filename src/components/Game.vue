@@ -13,7 +13,7 @@ export default {
   components: {
     InputPlayer, SubmitForm
   },
-  name: 'FormPlayer'
+  name: 'Game'
 }
 </script>
 

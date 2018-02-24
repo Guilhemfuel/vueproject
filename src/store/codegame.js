@@ -1,5 +1,7 @@
+import axios from 'axios'
+
 const state = {
-  data: 'coucou',
+  data: '',
   ifGameExist: false
 }
 
@@ -20,12 +22,17 @@ const mutations = {
 const actions = {
   setData (context, data) {
     console.log(data)
-    if (data.length !== 4) {
-      data = 'erreur'
-    } else {
-      context.commit('mutateIfGameExist', true)
-    }
-    context.commit('mutateData', data)
+
+    axios.get('http://www.quizforfun.fr/api/web/api/game/' + data)
+      .then(function (response) {
+        console.log(...response.data)
+        context.commit('mutateIfGameExist', true)
+      })
+      .catch(function (error) {
+        console.log(error.response.data.message)
+        data = error.response.data.message
+        context.commit('mutateData', data)
+      })
   }
 }
 

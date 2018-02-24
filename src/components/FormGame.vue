@@ -3,12 +3,10 @@
     <input type="text" class="input" maxlength="4" v-model="inputvalue" placeholder="CODE PARTIE">
     <SubmitForm v-on:click.native="setData(inputvalue)"/>
     <p>{{ getData }}</p>
-    <p>{{ getIfGameExist }}</p>
   </div>
 </template>
 
 <script>
-import InputGame from './InputGame.vue'
 import SubmitForm from './Submit.vue'
 import {mapGetters, mapActions} from 'vuex'
 
@@ -19,7 +17,7 @@ export default {
     }
   },
   components: {
-    InputGame, SubmitForm
+    SubmitForm
   },
   methods: {
     test () {
@@ -37,9 +35,12 @@ export default {
     })
   },
   watch: {
+    inputvalue: function (value) {
+      this.inputvalue = value.toUpperCase()
+    },
     getIfGameExist () {
       if (this.getIfGameExist) {
-        this.$router.push('Player')
+        this.$router.push({name: 'Game', params: {code: this.inputvalue}})
       }
     }
   },
