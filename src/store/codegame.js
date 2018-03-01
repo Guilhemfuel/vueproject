@@ -21,8 +21,6 @@ const mutations = {
 
 const actions = {
   setData (context, data) {
-    console.log(data)
-
     axios.get('http://www.quizforfun.fr/api/web/api/game/' + data)
       .then(function (response) {
         console.log(...response.data)
