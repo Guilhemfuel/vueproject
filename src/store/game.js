@@ -54,6 +54,7 @@ const actions = {
       .then(function (response) {
         console.log(response.data)
         context.commit('addPlayer', response.data)
+        context.commit('mutateErrorMessage', '')
       })
       .catch(function (error) {
         if (typeof error.response.data.message !== 'undefined') {
@@ -62,6 +63,24 @@ const actions = {
         }
       })
   }
+/*
+  On récupère les infos de game
+  Si la personne n'a aucun cookie de session de jeu on lui propose d'écrire son pseudo
+  Si la personne a un cookie on récupère son pseudo et ses infos
+
+  Quand le joueur ajoute son pseudo on vérifie si il existe déjà
+  On check également le statut de la partie :
+  Est ce que la partie a déjà atteint le nombre de joueurs max
+  Est ce que la partie est en attente pour commencer (0), en cours (1), ou finie (2) ?
+
+  Si le joueur est owner de la partie on affiche un bouton de lancement
+  sinon les joueurs sont en attente
+
+  Ensuite lancement de la partie on affiche le composant Questionnaire
+
+  Indentification unique : fingerprint
+  Et websocket temps reel : sse
+*/
 }
 
 export default {namespaced: true, state, getters, mutations, actions}

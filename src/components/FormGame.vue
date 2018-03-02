@@ -1,6 +1,6 @@
 <template>
   <div id="FormGame">
-    <form v-on:submit.prevent="onSubmit">
+    <form v-on:submit.prevent="">
       <input type="text" class="input" maxlength="4" v-model="inputvalue" placeholder="CODE PARTIE">
       <SubmitForm v-on:click.native="setData(inputvalue)"></SubmitForm>
     </form>

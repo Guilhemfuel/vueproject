@@ -1,7 +1,7 @@
 <template>
   <div id="InputPlayer">
     <div>
-      <form v-on:submit.prevent="onSubmit">
+      <form v-on:submit.prevent="">
         <input type="text" class="input" maxlength="15" v-model="pseudo" placeholder="VOTRE PSEUDO">
         <SubmitForm v-on:click.native="addPlayer(pseudo)"></SubmitForm>
       </form>
