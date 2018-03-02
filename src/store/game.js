@@ -44,7 +44,7 @@ const actions = {
       })
   },
   addPlayer (context, data) {
-    let player = {'name': data, 'owner': '', 'device': 'xtgrtgdxd', 'score': 0, 'game': state.game.id}
+    let player = {'name': data, 'owner': '', 'score': 0, 'game': state.game.id}
 
     axios({
       url: 'http://www.quizforfun.fr/api/web/api/player/new',
@@ -56,7 +56,10 @@ const actions = {
         context.commit('addPlayer', response.data)
       })
       .catch(function (error) {
-        console.log(error)
+        if (typeof error.response.data.message !== 'undefined') {
+          context.commit('mutateErrorMessage', error.response.data.message)
+          console.log(error.response.data.message)
+        }
       })
   }
 }

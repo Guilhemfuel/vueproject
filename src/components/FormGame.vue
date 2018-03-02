@@ -1,7 +1,9 @@
 <template>
   <div id="FormGame">
-    <input type="text" class="input" maxlength="4" v-model="inputvalue" placeholder="CODE PARTIE">
-    <SubmitForm v-on:click.native="setData(inputvalue)"></SubmitForm>
+    <form v-on:submit.prevent="onSubmit">
+      <input type="text" class="input" maxlength="4" v-model="inputvalue" placeholder="CODE PARTIE">
+      <SubmitForm v-on:click.native="setData(inputvalue)"></SubmitForm>
+    </form>
     <p>{{ getData }}</p>
   </div>
 </template>

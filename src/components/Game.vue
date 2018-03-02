@@ -25,7 +25,7 @@ export default {
       getGame: 'game/getGame'
     })
   },
-  mounted () {
+  created () {
     // Instantiate the game
     this.setGame(this.$route.params.code)
   }

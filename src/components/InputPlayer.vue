@@ -1,13 +1,20 @@
 <template>
   <div id="InputPlayer">
-    <input type="text" class="input" maxlength="15" v-model="pseudo" placeholder="VOTRE PSEUDO">
-    <SubmitForm v-on:click.native="addPlayer(pseudo)"></SubmitForm>
+    <div>
+      <form v-on:submit.prevent="onSubmit">
+        <input type="text" class="input" maxlength="15" v-model="pseudo" placeholder="VOTRE PSEUDO">
+        <SubmitForm v-on:click.native="addPlayer(pseudo)"></SubmitForm>
+      </form>
+    </div>
+    <div class="errorMessage">
+      {{ getErrorMessage }}
+    </div>
   </div>
 </template>
 
 <script>
 import SubmitForm from './Submit.vue'
-import {mapActions} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   components: {
@@ -29,6 +36,11 @@ export default {
     ...mapActions({
       addPlayer: 'game/addPlayer'
     })
+  },
+  computed: {
+    ...mapGetters({
+      getErrorMessage: 'game/getErrorMessage'
+    })
   }
 }
 </script>
@@ -48,5 +60,10 @@ export default {
 
   .input::placeholder {
     color: #383838;
+  }
+
+  .errorMessage {
+    color: #b31c09;
+    padding: 5px;
   }
 </style>
