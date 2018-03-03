@@ -3,12 +3,14 @@ import axios from 'axios'
 const state = {
   game: '',
   errorMessage: '',
+  fingerprint: '',
   players: []
 }
 
 const getters = {
   getGame: function (state) { return state.game },
   getErrorMessage: function (state) { return state.errorMessage },
+  getFingerprint: function (state) { return state.fingerprint },
   getPlayers: function (state) { return state.players }
 }
 
@@ -18,6 +20,9 @@ const mutations = {
   },
   mutateErrorMessage: (state, data) => {
     state.errorMessage = data
+  },
+  mutateFingerprint: (state, data) => {
+    state.fingerprint = data
   },
   mutatePlayers: (state, data) => {
     state.players = data
@@ -29,8 +34,6 @@ const mutations = {
 
 const actions = {
   setGame (context, data) {
-    context.commit('mutateGame', data)
-
     axios.get('http://www.quizforfun.fr/api/web/api/game/' + data)
       .then(function (response) {
         let players = response.data[0]['players']
@@ -39,12 +42,15 @@ const actions = {
         context.commit('mutatePlayers', players)
       })
       .catch(function (error) {
-        data = error.response
+        data = error.response.data.message
         context.commit('mutateErrorMessage', data)
       })
   },
+  setFingerprint (context, data) {
+    context.commit('mutateFingerprint', data)
+  },
   addPlayer (context, data) {
-    let player = {'name': data, 'owner': '', 'score': 0, 'game': state.game.id}
+    let player = {'name': data, 'fingerprint': state.fingerprint, 'owner': '', 'score': 0, 'game': state.game.id}
 
     axios({
       url: 'http://www.quizforfun.fr/api/web/api/player/new',
@@ -58,17 +64,30 @@ const actions = {
       })
       .catch(function (error) {
         if (typeof error.response.data.message !== 'undefined') {
-          context.commit('mutateErrorMessage', error.response.data.message)
-          console.log(error.response.data.message)
+          context.commit('mutateErrorMessage', error.response.data.errors.children)
+          console.log(error.response.data.errors.children.name.errors)
         }
+      })
+  },
+  checkIfUserAlreadyInGame (context, data) {
+    axios.get('http://www.quizforfun.fr/api/web/api/currentPlayerGame/' + data.fingerprint)
+      .then(function (response) {
+        console.log('A previous game was active')
+        console.log('response' + response)
+        // Si le joueur (basé sur le fingerprint) était dans une autre partie on supprime l'ancienne entrée
+        if (response.data.game.code !== data.code) {
+          axios.delete('http://www.quizforfun.fr/api/web/api/player/remove/' + response.data.id)
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
       })
   }
 /*
-  On récupère les infos de game
-  Si la personne n'a aucun cookie de session de jeu on lui propose d'écrire son pseudo
-  Si la personne a un cookie on récupère son pseudo et ses infos
+  ✓ On récupère les infos de game
+  ✓ Si la personne n'a aucun cookie de session de jeu on lui propose d'écrire son pseudo
+  ✓ Si la personne a un cookie on récupère son pseudo et ses infos
 
-  Quand le joueur ajoute son pseudo on vérifie si il existe déjà
   On check également le statut de la partie :
   Est ce que la partie a déjà atteint le nombre de joueurs max
   Est ce que la partie est en attente pour commencer (0), en cours (1), ou finie (2) ?

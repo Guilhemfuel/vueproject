@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <router-link :to="{ name: 'Home' }"><img src="./assets/logo.png"></router-link>
     <router-view/>
   </div>
 </template>
 
 <script>
-import FormGame from './components/FormGame.vue'
+import Home from './components/Home.vue'
 
 export default {
   components: {
-    FormGame
+    Home
   },
   name: 'App'
 }

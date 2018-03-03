@@ -2,7 +2,7 @@
   <div id="Players">
     <ul>
       <li v-for="player in getPlayers" :key="player.id">
-        {{ player.name }}
+        {{ player.name }} <em>{{ player.fingerprint }}</em>
       </li>
     </ul>
   </div>

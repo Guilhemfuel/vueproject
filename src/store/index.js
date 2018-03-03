@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import codegame from './codegame.js'
+import home from './home.js'
 import game from './game.js'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    codegame, game
+    home, game
   }
 })
 
