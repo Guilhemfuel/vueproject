@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const dev = 'httpwww.api.local/app_dev.php/api'
+const dev = 'http://www.api.local/app_dev.php/api'
 const prod = 'http://www.quizforfun.fr/api/web/api'
 const api = dev
 
