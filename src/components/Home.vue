@@ -11,6 +11,7 @@
         <button type="button">Rejoindre</button>
       </router-link>
     </div>
+    <br />
     <div id="newGame">
       <form v-on:submit.prevent="" name="newGame">
         <button type="button" v-on:click="newGame">Nouvelle partie</button>

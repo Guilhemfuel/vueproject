@@ -33,7 +33,7 @@ const mutations = {
 }
 
 const actions = {
-  setGame (context, data) {
+  initGame (context, data) {
     axios.get('http://www.quizforfun.fr/api/web/api/game/' + data)
       .then(function (response) {
         let players = response.data[0]['players']
@@ -45,6 +45,10 @@ const actions = {
         data = error.response.data.message
         context.commit('mutateErrorMessage', data)
       })
+  },
+  setGame (context, data) {
+    context.commit('mutateGame', data)
+    context.commit('mutatePlayers', data['players'])
   },
   setFingerprint (context, data) {
     context.commit('mutateFingerprint', data)
@@ -73,7 +77,6 @@ const actions = {
     axios.get('http://www.quizforfun.fr/api/web/api/currentPlayerGame/' + data.fingerprint)
       .then(function (response) {
         console.log('A previous game was active')
-        console.log('response' + response)
         // Si le joueur (basé sur le fingerprint) était dans une autre partie on supprime l'ancienne entrée
         if (response.data.game.code !== data.code) {
           axios.delete('http://www.quizforfun.fr/api/web/api/player/remove/' + response.data.id)

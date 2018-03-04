@@ -14,6 +14,7 @@ import Players from './Players.vue'
 import {mapGetters, mapActions} from 'vuex'
 import Fingerprint2 from 'fingerprintjs2'
 import globalMethods from './../functions/functions'
+import Pusher from 'pusher-js'
 
 export default {
   components: {
@@ -22,6 +23,7 @@ export default {
   name: 'Game',
   methods: {
     ...mapActions({
+      initGame: 'game/initGame',
       setGame: 'game/setGame',
       setFingerprint: 'game/setFingerprint',
       checkIfUserAlreadyInGame: 'game/checkIfUserAlreadyInGame'
@@ -51,10 +53,22 @@ export default {
       self.checkIfUserAlreadyInGame(data) // On check si l'utilisateur était dans une autre partie
     })
     // Instantiate the game
-    this.setGame(this.$route.params.code)
+    this.initGame(this.$route.params.code)
     console.log(this.getGame)
   },
   mounted () {
+    let self = this
+    // Pusher.logToConsole = true
+    let pusher = new Pusher('b1ed0160cc1033ce4f54', {
+      cluster: 'eu'
+    })
+
+    let channel = pusher.subscribe(this.$route.params.code)
+    channel.bind('game', function (data) {
+      let obj = JSON.parse(data)
+      self.setGame(obj)
+      console.log(obj)
+    })
   }
 }
 </script>

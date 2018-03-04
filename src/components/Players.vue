@@ -2,7 +2,7 @@
   <div id="Players">
     <ul>
       <li v-for="player in getPlayers" :key="player.id">
-        {{ player.name }} <em>{{ player.fingerprint }}</em>
+        {{ player.name }}
       </li>
     </ul>
   </div>
@@ -26,9 +26,7 @@ export default {
       getPlayers: 'game/getPlayers'
     })
   },
-  mounted () {
-    console.log('Players monté')
-  }
+  mounted () {}
 }
 </script>
 
