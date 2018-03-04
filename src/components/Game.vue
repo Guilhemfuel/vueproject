@@ -67,7 +67,7 @@ export default {
     channel.bind('game', function (data) {
       let obj = JSON.parse(data)
       self.setGame(obj)
-      console.log(obj)
+      console.log('pusher' + obj)
     })
   }
 }

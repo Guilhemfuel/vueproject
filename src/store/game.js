@@ -1,5 +1,9 @@
 import axios from 'axios'
 
+const dev = 'httpwww.api.local/app_dev.php/api'
+const prod = 'http://www.quizforfun.fr/api/web/api'
+const api = dev
+
 const state = {
   game: '',
   errorMessage: '',
@@ -34,7 +38,7 @@ const mutations = {
 
 const actions = {
   initGame (context, data) {
-    axios.get('http://www.quizforfun.fr/api/web/api/game/' + data)
+    axios.get(api + '/game/' + data)
       .then(function (response) {
         let players = response.data[0]['players']
         console.log(response.data[0])
@@ -57,7 +61,7 @@ const actions = {
     let player = {'name': data, 'fingerprint': state.fingerprint, 'owner': '', 'score': 0, 'game': state.game.id}
 
     axios({
-      url: 'http://www.quizforfun.fr/api/web/api/player/new',
+      url: api + '/player/new',
       method: 'post',
       data: player
     })
@@ -65,6 +69,8 @@ const actions = {
         console.log(response.data)
         context.commit('addPlayer', response.data)
         context.commit('mutateErrorMessage', '')
+
+        axios(api + '/refreshGame/' + state.game.code)
       })
       .catch(function (error) {
         if (typeof error.response.data.message !== 'undefined') {
@@ -74,12 +80,12 @@ const actions = {
       })
   },
   checkIfUserAlreadyInGame (context, data) {
-    axios.get('http://www.quizforfun.fr/api/web/api/currentPlayerGame/' + data.fingerprint)
+    axios.get(api + '/currentPlayerGame/' + data.fingerprint)
       .then(function (response) {
         console.log('A previous game was active')
         // Si le joueur (basé sur le fingerprint) était dans une autre partie on supprime l'ancienne entrée
         if (response.data.game.code !== data.code) {
-          axios.delete('http://www.quizforfun.fr/api/web/api/player/remove/' + response.data.id)
+          axios.delete(api + '/player/remove/' + response.data.id)
         }
       })
       .catch(function (error) {
