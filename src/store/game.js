@@ -1,8 +1,7 @@
 import axios from 'axios'
+import config from '../config'
 
-const dev = 'http://www.api.local/app_dev.php/api'
-const prod = 'http://www.quizforfun.fr/api/web/api'
-const api = dev
+const api = config.dev
 
 const state = {
   game: '',

@@ -1,5 +1,8 @@
 import axios from 'axios'
 import router from './../router'
+import config from '../config'
+
+const api = config.dev
 
 const state = {
   data: '',
@@ -27,7 +30,7 @@ const mutations = {
 
 const actions = {
   setData (context, data) {
-    axios.get('http://www.quizforfun.fr/api/web/api/game/' + data)
+    axios.get(api + '/game/' + data)
       .then(function (response) {
         console.log(...response.data)
         context.commit('mutateIfGameExist', true)
@@ -42,7 +45,7 @@ const actions = {
     let game = {'nbPlayerMin': 3, 'nbPlayerMax': 10}
 
     axios({
-      url: 'http://www.quizforfun.fr/api/web/api/game/new',
+      url: api + '/game/new',
       method: 'post',
       data: game
     })
@@ -57,7 +60,7 @@ const actions = {
       })
   },
   checkIfUserAlreadyInGame (context, data) {
-    axios.get('http://www.quizforfun.fr/api/web/api/currentPlayerGame/' + data)
+    axios.get(api + '/currentPlayerGame/' + data)
       .then(function (response) {
         console.log('A current game is available')
         console.log(response)

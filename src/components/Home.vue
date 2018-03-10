@@ -24,7 +24,6 @@
 import SubmitForm from './Submit.vue'
 import {mapGetters, mapActions} from 'vuex'
 import Fingerprint2 from 'fingerprintjs2'
-import globalMethods from './../functions/functions'
 
 export default {
   data () {
@@ -64,11 +63,14 @@ export default {
   },
   created () {
     let self = this
-    // Créer un cookie fingerprint si il n'existe pas
+    // Création et stockage d'un fingerprint en localStorage
     new Fingerprint2().get(function (result, components) {
-      globalMethods.checkCookie('quizforfun', result) // On crée un cookie avec le fingerprint si il n'y en a pas
-      console.log(globalMethods.getCookie('quizforfun'))
-      self.checkIfUserAlreadyInGame(globalMethods.getCookie('quizforfun')) // On check si l'utilisateur était dans une autre partie
+      if (localStorage.getItem('fingerprint') === null) {
+        window.localStorage.setItem('fingerprint', result)
+      }
+
+      self.checkIfUserAlreadyInGame(localStorage.getItem('fingerprint')) // On check si l'utilisateur était dans une autre partie
+      console.log('fingerprint ' + localStorage.getItem('fingerprint'))
     })
   },
   name: 'Home'

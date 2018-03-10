@@ -13,7 +13,6 @@ import InputPlayer from './InputPlayer.vue'
 import Players from './Players.vue'
 import {mapGetters, mapActions} from 'vuex'
 import Fingerprint2 from 'fingerprintjs2'
-import globalMethods from './../functions/functions'
 import Pusher from 'pusher-js'
 
 export default {
@@ -38,16 +37,13 @@ export default {
   },
   created () {
     let self = this
-    // Créer un cookie fingerprint si il n'existe pas
+    // Création et stockage d'un fingerprint en localStorage
     new Fingerprint2().get(function (result, components) {
-      let verif = globalMethods.checkCookie('quizforfun', result) // On crée un cookie avec le fingerprint si il n'y en a pas
-
-      if (!verif) {
-        self.setFingerprint(result) // On set le nouveau fingerprint
-        console.log('aucun cookie')
-      } else {
-        self.setFingerprint(globalMethods.getCookie('quizforfun')) // On remet la valeur du cookie en fingerprint
+      if (localStorage.getItem('fingerprint') === null) {
+        window.localStorage.setItem('fingerprint', result)
       }
+
+      self.setFingerprint(localStorage.getItem('fingerprint')) // On set le fingerprint dans le store
 
       let data = {fingerprint: self.getFingerprint, code: self.$route.params.code}
       self.checkIfUserAlreadyInGame(data) // On check si l'utilisateur était dans une autre partie
