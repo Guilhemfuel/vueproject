@@ -7,14 +7,18 @@ const state = {
   game: '',
   errorMessage: '',
   fingerprint: '',
-  players: []
+  players: [],
+  player: false,
+  owner: false
 }
 
 const getters = {
   getGame: function (state) { return state.game },
   getErrorMessage: function (state) { return state.errorMessage },
   getFingerprint: function (state) { return state.fingerprint },
-  getPlayers: function (state) { return state.players }
+  getPlayers: function (state) { return state.players },
+  getPlayer: function (state) { return state.player },
+  getOwner: function (state) { return state.owner }
 }
 
 const mutations = {
@@ -30,6 +34,12 @@ const mutations = {
   mutatePlayers: (state, data) => {
     state.players = data
   },
+  mutatePlayer: (state, data) => {
+    state.player = data
+  },
+  mutateOwner: (state, data) => {
+    state.owner = data
+  },
   addPlayer: (state, data) => {
     state.players.push(data)
   }
@@ -38,15 +48,35 @@ const mutations = {
 const actions = {
   initGame (context, data) {
     axios.get(api + '/game/' + data)
-      .then(function (response) {
+      .then(response => {
         let players = response.data[0]['players']
-        console.log(response.data[0])
         context.commit('mutateGame', response.data[0])
         context.commit('mutatePlayers', players)
+
+        // Si l'utilisateur a crée la partie on set le status Owner
+        if (localStorage.getItem('owner') === data) {
+          context.commit('mutateOwner', true)
+        }
       })
-      .catch(function (error) {
+      .catch(error => {
         data = error.response.data.message
         context.commit('mutateErrorMessage', data)
+      })
+  },
+  checkIfUserAlreadyInGame (context, data) {
+    axios.get(api + '/currentPlayerGame/' + data.fingerprint)
+      .then(response => {
+        console.log('A previous game was active')
+        // Si le joueur était dans une autre partie on supprime l'ancienne entrée
+        if (response.data.game.code !== data.code) {
+          axios.delete(api + '/player/remove/' + response.data.id)
+          context.commit('mutatePlayer', false)
+        } else {
+          context.commit('mutatePlayer', true)
+        }
+      })
+      .catch(error => {
+        console.log(error.response)
       })
   },
   setGame (context, data) {
@@ -57,44 +87,38 @@ const actions = {
     context.commit('mutateFingerprint', data)
   },
   addPlayer (context, data) {
-    let player = {'name': data, 'fingerprint': state.fingerprint, 'owner': '', 'score': 0, 'game': state.game.id}
+    let player = {'name': data, 'fingerprint': state.fingerprint, 'owner': state.owner, 'score': 0, 'game': state.game.id}
 
     axios({
       url: api + '/player/new',
       method: 'post',
       data: player
     })
-      .then(function (response) {
+      .then(response => {
         console.log(response.data)
         context.commit('addPlayer', response.data)
+        context.commit('mutatePlayer', true)
         context.commit('mutateErrorMessage', '')
 
         axios(api + '/refreshGame/' + state.game.code)
       })
-      .catch(function (error) {
+      .catch(error => {
         if (typeof error.response.data.message !== 'undefined') {
           context.commit('mutateErrorMessage', error.response.data.errors.children)
           console.log(error.response.data.errors.children.name.errors)
         }
       })
-  },
-  checkIfUserAlreadyInGame (context, data) {
-    axios.get(api + '/currentPlayerGame/' + data.fingerprint)
-      .then(function (response) {
-        console.log('A previous game was active')
-        // Si le joueur (basé sur le fingerprint) était dans une autre partie on supprime l'ancienne entrée
-        if (response.data.game.code !== data.code) {
-          axios.delete(api + '/player/remove/' + response.data.id)
-        }
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
   }
 /*
-  ✓ On récupère les infos de game
-  ✓ Si la personne n'a aucun cookie de session de jeu on lui propose d'écrire son pseudo
-  ✓ Si la personne a un cookie on récupère son pseudo et ses infos
+  Récupération des infos de game
+  A partir de son fingerprint on essaye de récupérer ses infos
+  On se sert de checkIfUserAlreadyInGame puis on compare les codes
+  Si le joueur était dans une autre partie on le supprime
+  Sinon on initialise la variable Player à true
+  Cette variable va permettre de savoir si l'utilisateur est bien rentré dans la partie
+
+  Si c'est un nouvel utilisateur on affiche le formulaire, une fois le joueur bien ajouté
+  on efface le formulaire
 
   On check également le statut de la partie :
   Est ce que la partie a déjà atteint le nombre de joueurs max

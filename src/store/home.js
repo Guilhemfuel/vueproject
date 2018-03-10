@@ -31,29 +31,30 @@ const mutations = {
 const actions = {
   setData (context, data) {
     axios.get(api + '/game/' + data)
-      .then(function (response) {
+      .then(response => {
         console.log(...response.data)
         context.commit('mutateIfGameExist', true)
       })
-      .catch(function (error) {
+      .catch(error => {
         console.log(error.response.data.message)
         data = error.response.data.message
         context.commit('mutateData', data)
       })
   },
   newGame (context, data) {
-    let game = {'nbPlayerMin': 3, 'nbPlayerMax': 10}
+    let game = {'nbPlayerMin': 2, 'nbPlayerMax': 10}
 
     axios({
       url: api + '/game/new',
       method: 'post',
       data: game
     })
-      .then(function (response) {
+      .then(response => {
         console.log(response.data)
+        window.localStorage.setItem('owner', response.data.code) // Set the user owner of the game
         router.push({name: 'Game', params: {code: response.data.code}})
       })
-      .catch(function (error) {
+      .catch(error => {
         if (typeof error.response.data.message !== 'undefined') {
           console.log(error.response.data.message)
         }
@@ -61,13 +62,12 @@ const actions = {
   },
   checkIfUserAlreadyInGame (context, data) {
     axios.get(api + '/currentPlayerGame/' + data)
-      .then(function (response) {
+      .then(response => {
         console.log('A current game is available')
-        console.log(response)
         context.commit('mutateIfAlreadyInGame', response.data.game.code)
       })
-      .catch(function (error) {
-        console.log(error)
+      .catch(error => {
+        console.log(error.response.data)
       })
   }
 }
