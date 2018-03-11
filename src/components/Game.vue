@@ -12,6 +12,7 @@
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </p>
     <players></players>
+    <p>{{ getQuestions[2]['question'] }}</p>
   </div>
   <div class="errorMessage" v-else>
     {{ getErrorMessage }}
@@ -45,6 +46,7 @@ export default {
     ...mapGetters({
       getGame: 'game/getGame',
       getPlayer: 'game/getPlayer',
+      getQuestions: 'game/getQuestions',
       getOwner: 'game/getOwner',
       getErrorMessage: 'game/getErrorMessage',
       getFingerprint: 'game/getFingerprint'

@@ -2,7 +2,8 @@
   <div id="Players">
     <ul>
       <li v-for="player in getPlayers" :key="player.id">
-        {{ player.name }}
+        <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }}</p>
+        <p v-else>{{ player.name }}</p>
       </li>
     </ul>
   </div>
@@ -14,7 +15,9 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'Players',
   data () {
-    return {}
+    return {
+      userFingerprint: localStorage.getItem('fingerprint')
+    }
   },
   methods: {
     ...mapActions({
@@ -37,5 +40,9 @@ export default {
 
   li {
     list-style: none;
+  }
+
+  .currentUser {
+    color: #42a2ff;
   }
 </style>

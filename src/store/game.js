@@ -9,7 +9,8 @@ const state = {
   fingerprint: '',
   players: [],
   player: false,
-  owner: false
+  owner: false,
+  questions: []
 }
 
 const getters = {
@@ -18,7 +19,8 @@ const getters = {
   getFingerprint: function (state) { return state.fingerprint },
   getPlayers: function (state) { return state.players },
   getPlayer: function (state) { return state.player },
-  getOwner: function (state) { return state.owner }
+  getOwner: function (state) { return state.owner },
+  getQuestions: function (state) { return state.questions }
 }
 
 const mutations = {
@@ -40,6 +42,9 @@ const mutations = {
   mutateOwner: (state, data) => {
     state.owner = data
   },
+  mutateQuestions: (state, data) => {
+    state.questions = data
+  },
   addPlayer: (state, data) => {
     state.players.push(data)
   }
@@ -50,8 +55,10 @@ const actions = {
     axios.get(api + '/game/' + data)
       .then(response => {
         let players = response.data[0]['players']
+        let questions = JSON.parse(response.data[0]['questions'])
         context.commit('mutateGame', response.data[0])
         context.commit('mutatePlayers', players)
+        context.commit('mutateQuestions', questions)
 
         // Si l'utilisateur a crée la partie on set le status Owner
         if (localStorage.getItem('owner') === data) {
@@ -127,10 +134,14 @@ const actions = {
   Si le joueur est owner de la partie on affiche un bouton de lancement
   sinon les joueurs sont en attente
 
-  Ensuite lancement de la partie on affiche le composant Questionnaire
+  Lancement de partie :
+  On envoie sur pusher le status de la game à tout le monde
+  On lance un compteur de 5sec
+  L'API doit choisir les questions poru que tout le monde ai les même
+  Elles seront enregistré dans un champ sous forme de JSON
+  Quand on charge la partie, toutes les questions sont chargé avec
 
-  Indentification unique : fingerprint
-  Et websocket temps reel : sse
+  Websocket temps reel : sse
 */
 }
 
