@@ -12,7 +12,7 @@
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </p>
     <players></players>
-    <p>{{ getQuestions[2]['question'] }}</p>
+    <questions></questions>
   </div>
   <div class="errorMessage" v-else>
     {{ getErrorMessage }}
@@ -22,13 +22,16 @@
 <script>
 import InputPlayer from './InputPlayer.vue'
 import Players from './Players.vue'
+import Questions from './Questions.vue'
 import {mapGetters, mapActions} from 'vuex'
 import Fingerprint2 from 'fingerprintjs2'
 import Pusher from 'pusher-js'
 
 export default {
   components: {
-    InputPlayer, Players
+    Questions,
+    InputPlayer,
+    Players
   },
   name: 'Game',
   methods: {
@@ -39,7 +42,7 @@ export default {
       checkIfUserAlreadyInGame: 'game/checkIfUserAlreadyInGame'
     }),
     startGame: function () {
-      console.log('Start the game')
+      console.log('Start the game with API')
     }
   },
   computed: {

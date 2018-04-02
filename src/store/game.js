@@ -137,9 +137,14 @@ const actions = {
   Lancement de partie :
   On envoie sur pusher le status de la game à tout le monde
   On lance un compteur de 5sec
-  L'API doit choisir les questions poru que tout le monde ai les même
+  L'API doit choisir les questions pour que tout le monde ai les même
   Elles seront enregistré dans un champ sous forme de JSON
   Quand on charge la partie, toutes les questions sont chargé avec
+
+  On affiche la première question au bout du décompte
+  Dés qu'un joueur sélectionne une réponse le timer se lance sur 20sec
+  A la fin du timer les réponses sont envoyé à l'API qui va s'occuper d'attribuer les points
+  On laisse un délai puis
 
   Websocket temps reel : sse
 */
