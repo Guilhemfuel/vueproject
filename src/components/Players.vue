@@ -2,8 +2,8 @@
   <div id="Players">
     <ul>
       <li v-for="player in getPlayers" :key="player.id">
-        <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }}</p>
-        <p v-else>{{ player.name }}</p>
+        <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }} <span v-if="player.owner === true">🤢</span></p>
+        <p v-else>{{ player.name }} <span v-if="player.owner === true">🤢</span></p>
       </li>
     </ul>
   </div>

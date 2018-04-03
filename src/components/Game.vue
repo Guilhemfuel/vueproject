@@ -12,7 +12,9 @@
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </p>
     <players></players>
-    <questions></questions>
+    <div v-if="getGame.isStarted === true">
+      <questions></questions>
+    </div>
   </div>
   <div class="errorMessage" v-else>
     {{ getErrorMessage }}
@@ -26,6 +28,10 @@ import Questions from './Questions.vue'
 import {mapGetters, mapActions} from 'vuex'
 import Fingerprint2 from 'fingerprintjs2'
 import Pusher from 'pusher-js'
+import axios from 'axios'
+import config from '../config'
+
+const api = config.dev
 
 export default {
   components: {
@@ -43,6 +49,10 @@ export default {
     }),
     startGame: function () {
       console.log('Start the game with API')
+      axios.get(api + '/game/start/' + this.getGame.code)
+        .then(response => {
+          axios(api + '/refreshGame/' + this.getGame.code)
+        })
     }
   },
   computed: {
