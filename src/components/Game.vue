@@ -5,7 +5,7 @@
         <input-player></input-player>
       </div>
     </transition>
-    <p v-if="getOwner === true">
+    <p v-if="getOwner === true && getGame.isStarted === false">
       Partagez ce code : {{ getGame.code }} !
       <br />
       <br />
@@ -14,6 +14,7 @@
     <players></players>
     <div v-if="getGame.isStarted === true">
       <questions></questions>
+      <timer :timer="timer"></timer>
     </div>
   </div>
   <div class="errorMessage" v-else>
@@ -25,6 +26,7 @@
 import InputPlayer from './InputPlayer.vue'
 import Players from './Players.vue'
 import Questions from './Questions.vue'
+import Timer from './Timer.vue'
 import {mapGetters, mapActions} from 'vuex'
 import Fingerprint2 from 'fingerprintjs2'
 import Pusher from 'pusher-js'
@@ -37,9 +39,15 @@ export default {
   components: {
     Questions,
     InputPlayer,
-    Players
+    Players,
+    Timer
   },
   name: 'Game',
+  data () {
+    return {
+      timer: 10
+    }
+  },
   methods: {
     ...mapActions({
       initGame: 'game/initGame',
