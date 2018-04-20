@@ -14,7 +14,8 @@
     <players></players>
     <div v-if="getGame.isStarted === true">
       <questions></questions>
-      <timer :timer="timer"></timer>
+      <p @click="triggerTimer()">FAUX BOUTON</p>
+      <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
     </div>
   </div>
   <div class="errorMessage" v-else>
@@ -45,10 +46,19 @@ export default {
   name: 'Game',
   data () {
     return {
-      timer: 10
+      time: 10,
+      statusTimer: false
     }
   },
   methods: {
+    triggerTimer () {
+      this.$refs.timerComponent.startTimer()
+      // On declenche le timer à chaque fois qu'un joueur est le premier à répondre
+      // Ce qui veut dire qu'on a un status de timer à FALSE
+      // Si on répond et que le status est FALSE on le change à true
+      // On envoie une notif à tout les joueurs pour passer à TRUE
+      // A la fin du Timer on change de question
+    },
     ...mapActions({
       initGame: 'game/initGame',
       setGame: 'game/setGame',
@@ -61,6 +71,18 @@ export default {
         .then(response => {
           axios(api + '/refreshGame/' + this.getGame.code)
         })
+    },
+    endTimer: function (value) {
+      this.statusTimer = false
+      console.log('End of Timer')
+      // Code a executer après la fin du Timer seulement pour le créateur de la partie
+      if (this.getOwner) {
+        console.log('Im the owner')
+        axios.get(api + '/game/nextQuestion/' + this.getGame.code)
+          .then(response => {
+            axios(api + '/refreshGame/' + this.getGame.code)
+          })
+      }
     }
   },
   computed: {

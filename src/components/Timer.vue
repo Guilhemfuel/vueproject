@@ -1,6 +1,5 @@
 <template>
   <div id="Timer">
-    <div v-on:click="calculateTimer">CLick</div>
     <div class="c100" v-bind:class="'p' + timeCircle">
       <span id="time">{{ counter }}</span>
       <div class="slice">
@@ -18,30 +17,34 @@ export default {
     return {
       counter: this.timer,
       timeCircle: 100,
-      intervalCounter: null,
-      intervalCircle: null
+      intervalCounter: 0,
+      intervalCircle: null,
+      endTimer: this.timer * 100
     }
   },
   props: {
     timer: Number
   },
   methods: {
-    calculateTimer: function () {
-      this.intervalCounter = setInterval(this.counterFunction, 1000)
+    startTimer: function () {
       this.intervalCircle = setInterval(this.circleFunction, 10)
     },
     circleFunction: function () {
       this.timeCircle--
       if (this.timeCircle === 0) {
+        this.counter--
+        this.intervalCounter += 100
         this.timeCircle = 100
+        if (this.intervalCounter === this.endTimer) {
+          this.counterFunction()
+        }
       }
     },
     counterFunction: function () {
-      this.counter--
       if (this.counter === 0) {
-        clearInterval(this.intervalCounter)
+        this.timeCircle = 0
         clearInterval(this.intervalCircle)
-        console.log('Compteur terminé')
+        this.$emit('status', true)
       }
     }
   }
