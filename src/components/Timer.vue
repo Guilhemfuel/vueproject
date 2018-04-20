@@ -1,6 +1,6 @@
 <template>
   <div id="Timer">
-    <div class="c100" v-bind:class="'p' + timeCircle">
+    <div class="c100 orange center" v-bind:class="'p' + timeCircle">
       <span id="time">{{ counter }}</span>
       <div class="slice">
         <div class="bar"></div>

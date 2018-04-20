@@ -28,7 +28,6 @@ export default {
   },
   watch: {
     message: function (val) {
-      console.log(val.toUpperCase())
       this.message = val.toUpperCase()
     }
   },

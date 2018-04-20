@@ -102,7 +102,6 @@ const actions = {
       data: player
     })
       .then(response => {
-        console.log(response.data)
         context.commit('addPlayer', response.data)
         context.commit('mutatePlayer', true)
         context.commit('mutateErrorMessage', '')

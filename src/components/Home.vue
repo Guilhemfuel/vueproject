@@ -35,9 +35,6 @@ export default {
     SubmitForm
   },
   methods: {
-    test () {
-      console.log(this.$store.getters.getData)
-    },
     ...mapActions({
       setData: 'home/setData',
       newGame: 'home/newGame',

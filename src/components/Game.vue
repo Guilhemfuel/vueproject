@@ -16,7 +16,6 @@
       <questions @status="triggerTimer()" ref="questionsComponent"></questions>
       <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
     </div>
-    <p>{{ getQuestions[getGame['currentQuestion']]['answers'] }}</p>
   </div>
   <div class="errorMessage" v-else>
     {{ getErrorMessage }}
@@ -59,7 +58,7 @@ export default {
       checkIfUserAlreadyInGame: 'game/checkIfUserAlreadyInGame'
     }),
     startGame: function () {
-      console.log('Start the game with API')
+      console.log('Start the Game')
       axios.get(api + '/game/start/' + this.getGame.code)
         .then(response => {
           axios(api + '/refreshGame/' + this.getGame.code)
@@ -75,20 +74,23 @@ export default {
     endTimer: function (value) {
       this.statusTimer = false
       this.userHasAnswered = false
-      console.log(this.$refs.questionsComponent.checked)
+      // On soumet la réponse à l'API
+      this.submitAnswer(this.$refs.questionsComponent.checked)
       this.$refs.timerComponent.resetComponent()
       this.$refs.questionsComponent.resetComponent()
-      console.log(this.userHasAnswered)
-      console.log('End of Timer')
-      console.log(this.time)
       // Code a executer après la fin du Timer seulement pour le créateur de la partie
       if (this.getOwner) {
-        console.log('Im the owner')
         axios.get(api + '/game/nextQuestion/' + this.getGame.code)
           .then(response => {
             axios(api + '/refreshGame/' + this.getGame.code)
           })
       }
+    },
+    submitAnswer (question) {
+      axios.get(api + '/game/submitAnswer/' + this.getFingerprint + '/' + question)
+        .then(response => {
+          console.log(response)
+        })
     }
   },
   computed: {
@@ -136,9 +138,7 @@ export default {
     })
 
     channel.bind('timer', (data) => {
-      console.log(data)
       if (data) {
-        console.log(this.$refs)
         this.userHasAnswered = true
         this.$refs.timerComponent.startTimer()
       }

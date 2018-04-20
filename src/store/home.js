@@ -32,7 +32,6 @@ const actions = {
   setData (context, data) {
     axios.get(api + '/game/' + data)
       .then(response => {
-        console.log(...response.data)
         context.commit('mutateIfGameExist', true)
       })
       .catch(error => {
@@ -50,7 +49,6 @@ const actions = {
       data: game
     })
       .then(response => {
-        console.log(response.data)
         window.localStorage.setItem('owner', response.data.code) // Set the user owner of the game
         router.push({name: 'Game', params: {code: response.data.code}})
       })

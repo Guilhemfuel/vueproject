@@ -1,6 +1,6 @@
 <template>
   <div id="Questions">
-    <div><p>{{ getQuestions[getGame['currentQuestion']]['question'] }}</p></div>
+    <div><p id="question">{{ getQuestions[getGame['currentQuestion']]['question'] }}</p></div>
     <div>
       <form v-on:submit.prevent="" v-on:change="userHasAnswered()" name="formQuestion">
         <div v-for="answers in getQuestions[getGame['currentQuestion']]['answers']" :key="answers.id">
@@ -44,6 +44,10 @@ export default {
 </script>
 
 <style scoped>
+  #question {
+    color: white;
+  }
+
   ul {
     padding: 0;
   }
