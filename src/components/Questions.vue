@@ -2,7 +2,7 @@
   <div id="Questions">
     <div><p>{{ getQuestions[getGame['currentQuestion']]['question'] }}</p></div>
     <div>
-      <form v-on:submit.prevent="" name="formQuestion">
+      <form v-on:submit.prevent="" v-on:change="userHasAnswered()" name="formQuestion">
         <div v-for="answers in getQuestions[getGame['currentQuestion']]['answers']" :key="answers.id">
           <input :id="'answer_' + answers.id" type="radio" name="answers" class="input" :value="answers.id">
           <label :for="'answer_' + answers.id">{{ answers.answer }}</label>
@@ -24,7 +24,10 @@ export default {
   },
   methods: {
     ...mapActions({
-    })
+    }),
+    userHasAnswered () {
+      this.$emit('status', true)
+    }
   },
   computed: {
     ...mapGetters({

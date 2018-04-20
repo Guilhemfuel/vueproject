@@ -46,6 +46,13 @@ export default {
         clearInterval(this.intervalCircle)
         this.$emit('status', true)
       }
+    },
+    resetComponent () {
+      this.counter = this.timer
+      this.timeCircle = 100
+      this.intervalCounter = 0
+      this.intervalCircle = null
+      this.endTimer = this.timer * 100
     }
   }
 }

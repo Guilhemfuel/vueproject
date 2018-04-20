@@ -13,8 +13,7 @@
     </p>
     <players></players>
     <div v-if="getGame.isStarted === true">
-      <questions></questions>
-      <p @click="triggerTimer()">FAUX BOUTON</p>
+      <questions @status="triggerTimer()"></questions>
       <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
     </div>
   </div>
@@ -46,13 +45,17 @@ export default {
   name: 'Game',
   data () {
     return {
-      time: 10,
-      statusTimer: false
+      time: 5,
+      statusTimer: false,
+      userHasAnswered: false
     }
   },
   methods: {
     triggerTimer () {
-      this.$refs.timerComponent.startTimer()
+      if (!this.userHasAnswered) {
+        this.userHasAnswered = true
+        axios(api + '/game/startTimer/' + this.getGame.code)
+      }
       // On declenche le timer à chaque fois qu'un joueur est le premier à répondre
       // Ce qui veut dire qu'on a un status de timer à FALSE
       // Si on répond et que le status est FALSE on le change à true
@@ -74,7 +77,11 @@ export default {
     },
     endTimer: function (value) {
       this.statusTimer = false
+      this.userHasAnswered = false
+      this.$refs.timerComponent.resetComponent()
+      console.log(this.userHasAnswered)
       console.log('End of Timer')
+      console.log(this.time)
       // Code a executer après la fin du Timer seulement pour le créateur de la partie
       if (this.getOwner) {
         console.log('Im the owner')
@@ -127,6 +134,15 @@ export default {
     channel.bind('game', function (data) {
       let obj = JSON.parse(data)
       self.setGame(obj)
+    })
+
+    channel.bind('timer', (data) => {
+      console.log(data)
+      if (data) {
+        console.log(this.$refs)
+        this.userHasAnswered = true
+        this.$refs.timerComponent.startTimer()
+      }
     })
   }
 }
