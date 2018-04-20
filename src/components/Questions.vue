@@ -4,7 +4,7 @@
     <div>
       <form v-on:submit.prevent="" v-on:change="userHasAnswered()" name="formQuestion">
         <div v-for="answers in getQuestions[getGame['currentQuestion']]['answers']" :key="answers.id">
-          <input :id="'answer_' + answers.id" type="radio" name="answers" class="input" :value="answers.id">
+          <input :id="'answer_' + answers.id" type="radio" name="answers" class="input" :value="answers.id" v-model="checked">
           <label :for="'answer_' + answers.id">{{ answers.answer }}</label>
         </div>
       </form>
@@ -19,7 +19,8 @@ export default {
   name: 'Questions',
   data () {
     return {
-      userFingerprint: localStorage.getItem('fingerprint')
+      userFingerprint: localStorage.getItem('fingerprint'),
+      checked: false
     }
   },
   methods: {
@@ -27,6 +28,9 @@ export default {
     }),
     userHasAnswered () {
       this.$emit('status', true)
+    },
+    resetComponent () {
+      this.checked = false
     }
   },
   computed: {

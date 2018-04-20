@@ -13,9 +13,10 @@
     </p>
     <players></players>
     <div v-if="getGame.isStarted === true">
-      <questions @status="triggerTimer()"></questions>
+      <questions @status="triggerTimer()" ref="questionsComponent"></questions>
       <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
     </div>
+    <p>{{ getQuestions[getGame['currentQuestion']]['answers'] }}</p>
   </div>
   <div class="errorMessage" v-else>
     {{ getErrorMessage }}
@@ -51,17 +52,6 @@ export default {
     }
   },
   methods: {
-    triggerTimer () {
-      if (!this.userHasAnswered) {
-        this.userHasAnswered = true
-        axios(api + '/game/startTimer/' + this.getGame.code)
-      }
-      // On declenche le timer à chaque fois qu'un joueur est le premier à répondre
-      // Ce qui veut dire qu'on a un status de timer à FALSE
-      // Si on répond et que le status est FALSE on le change à true
-      // On envoie une notif à tout les joueurs pour passer à TRUE
-      // A la fin du Timer on change de question
-    },
     ...mapActions({
       initGame: 'game/initGame',
       setGame: 'game/setGame',
@@ -75,10 +65,19 @@ export default {
           axios(api + '/refreshGame/' + this.getGame.code)
         })
     },
+    triggerTimer () {
+      // On declenche le timer à chaque fois qu'un joueur est le premier à répondre
+      if (!this.userHasAnswered) {
+        this.userHasAnswered = true
+        axios(api + '/game/startTimer/' + this.getGame.code)
+      }
+    },
     endTimer: function (value) {
       this.statusTimer = false
       this.userHasAnswered = false
+      console.log(this.$refs.questionsComponent.checked)
       this.$refs.timerComponent.resetComponent()
+      this.$refs.questionsComponent.resetComponent()
       console.log(this.userHasAnswered)
       console.log('End of Timer')
       console.log(this.time)
