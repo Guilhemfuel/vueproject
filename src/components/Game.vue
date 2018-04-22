@@ -6,8 +6,7 @@
       </div>
     </transition>
     <p v-if="getOwner === true && getGame.isStarted === false">
-      Partagez ce code : {{ getGame.code }} !
-      <br />
+      Partagez ce code : {{ getGame.code }}<br />
       <br />
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </p>
@@ -61,7 +60,7 @@ export default {
       console.log('Start the Game')
       axios.get(api + '/game/start/' + this.getGame.code)
         .then(response => {
-          axios(api + '/refreshGame/' + this.getGame.code)
+          this.refreshGame()
         })
     },
     triggerTimer () {
@@ -76,21 +75,24 @@ export default {
       this.userHasAnswered = false
       // On soumet la réponse à l'API
       this.submitAnswer(this.$refs.questionsComponent.checked)
-      this.$refs.timerComponent.resetComponent()
-      this.$refs.questionsComponent.resetComponent()
+      // On affiche la bonne réponse
+      this.$refs.questionsComponent.showGoodAnswer()
       // Code a executer après la fin du Timer seulement pour le créateur de la partie
       if (this.getOwner) {
         axios.get(api + '/game/nextQuestion/' + this.getGame.code)
           .then(response => {
-            axios(api + '/refreshGame/' + this.getGame.code)
+            setTimeout(this.refreshGame, 5000)
           })
       }
     },
     submitAnswer (question) {
-      axios.get(api + '/game/submitAnswer/' + this.getFingerprint + '/' + question)
+      axios.get(api + '/game/submitAnswer/' + this.getIdPlayer + '/' + question)
         .then(response => {
           console.log(response)
         })
+    },
+    refreshGame () {
+      axios(api + '/refreshGame/' + this.getGame.code)
     }
   },
   computed: {
@@ -100,8 +102,10 @@ export default {
       getQuestions: 'game/getQuestions',
       getOwner: 'game/getOwner',
       getErrorMessage: 'game/getErrorMessage',
+      getIdPlayer: 'game/getIdPlayer',
       getFingerprint: 'game/getFingerprint'
     }),
+    // On affiche le bouton de lancement de partie si le nombre minimum de joueurs est atteint
     readyToStart: function () {
       if (this.getGame.players.length >= this.getGame.nbPlayerMin) {
         return true
@@ -133,14 +137,20 @@ export default {
 
     let channel = pusher.subscribe(this.$route.params.code)
     channel.bind('game', function (data) {
+      if (typeof self.$refs.timerComponent !== 'undefined') {
+        self.$refs.timerComponent.resetComponent()
+        self.$refs.questionsComponent.resetComponent()
+      }
       let obj = JSON.parse(data)
       self.setGame(obj)
     })
 
     channel.bind('timer', (data) => {
       if (data) {
-        this.userHasAnswered = true
-        this.$refs.timerComponent.startTimer()
+        self.userHasAnswered = true
+        if (typeof self.$refs.timerComponent !== 'undefined') {
+          self.$refs.timerComponent.startTimer()
+        }
       }
     })
   }
@@ -166,5 +176,9 @@ export default {
     background-color: #383838;
     color: #42a2ff;
     cursor: pointer;
+  }
+
+  .active:hover {
+    color: white;
   }
 </style>

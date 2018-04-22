@@ -10,6 +10,7 @@ const state = {
   players: [],
   player: false,
   owner: false,
+  idPlayer: false,
   questions: []
 }
 
@@ -20,6 +21,7 @@ const getters = {
   getPlayers: function (state) { return state.players },
   getPlayer: function (state) { return state.player },
   getOwner: function (state) { return state.owner },
+  getIdPlayer: function (state) { return state.idPlayer },
   getQuestions: function (state) { return state.questions }
 }
 
@@ -42,6 +44,9 @@ const mutations = {
   mutateOwner: (state, data) => {
     state.owner = data
   },
+  mutateIdPlayer: (state, data) => {
+    state.idPlayer = data
+  },
   mutateQuestions: (state, data) => {
     state.questions = data
   },
@@ -59,6 +64,13 @@ const actions = {
         context.commit('mutateGame', response.data[0])
         context.commit('mutatePlayers', players)
         context.commit('mutateQuestions', questions)
+
+        // Récupérer l'ID de l'utilisateur en cours
+        players.forEach(function (element) {
+          if (element.fingerprint === localStorage.getItem('fingerprint')) {
+            context.commit('mutateIdPlayer', element.id)
+          }
+        })
 
         // Si l'utilisateur a crée la partie on set le status Owner
         if (localStorage.getItem('owner') === data) {
@@ -102,6 +114,7 @@ const actions = {
       data: player
     })
       .then(response => {
+        context.commit('mutateIdPlayer', response.data.id)
         context.commit('addPlayer', response.data)
         context.commit('mutatePlayer', true)
         context.commit('mutateErrorMessage', '')

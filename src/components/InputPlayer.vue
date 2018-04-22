@@ -51,6 +51,7 @@ export default {
     color: #383838;
     font-size: 21px;
     padding: 6px;
+    background-color: transparent;
   }
 
   .input:focus {

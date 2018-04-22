@@ -26,7 +26,7 @@ export default {
     timer: Number
   },
   methods: {
-    startTimer: function () {
+    startTimer () {
       this.intervalCircle = setInterval(this.circleFunction, 10)
     },
     circleFunction: function () {
@@ -60,4 +60,12 @@ export default {
 
 <style scoped>
   @import './../assets/circle.css';
+
+  .c100 {
+    background-color: #a9730d;
+  }
+
+  .c100:after {
+    background-color: #1d77a6;
+  }
 </style>

@@ -82,6 +82,7 @@ export default {
     font-size: 21px;
     padding: 6px;
     text-transform: uppercase;
+    background-color: transparent;
   }
 
   .input:focus {
@@ -93,10 +94,14 @@ export default {
   }
 
   button {
-    color: #42a2ff;
+    color: #dd9d22;
     background-color: #383838;
     border: none;
     padding: 10px;
     cursor: pointer;
+  }
+
+  button:hover {
+    color: white;
   }
 </style>

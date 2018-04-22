@@ -7,7 +7,7 @@
 
 <style scoped>
     .Button {
-        color: #42a2ff;
+        color: #dd9d22;
         background-color: #383838;
         padding: 10px;
         border: none;
