@@ -10,11 +10,11 @@
       <br />
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </p>
-    <players></players>
     <div v-if="getGame.isStarted === true">
       <questions @status="triggerTimer()" ref="questionsComponent"></questions>
       <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
     </div>
+    <players></players>
   </div>
   <div class="errorMessage" v-else>
     {{ getErrorMessage }}
@@ -44,9 +44,7 @@ export default {
   name: 'Game',
   data () {
     return {
-      time: 5,
-      statusTimer: false,
-      userHasAnswered: false
+      time: 5
     }
   },
   methods: {
@@ -65,14 +63,9 @@ export default {
     },
     triggerTimer () {
       // On declenche le timer à chaque fois qu'un joueur est le premier à répondre
-      if (!this.userHasAnswered) {
-        this.userHasAnswered = true
-        axios(api + '/game/startTimer/' + this.getGame.code)
-      }
+      axios(api + '/game/startTimer/' + this.getGame.code)
     },
     endTimer: function (value) {
-      this.statusTimer = false
-      this.userHasAnswered = false
       // On soumet la réponse à l'API
       this.submitAnswer(this.$refs.questionsComponent.checked)
       // On affiche la bonne réponse
@@ -147,7 +140,6 @@ export default {
 
     channel.bind('timer', (data) => {
       if (data) {
-        self.userHasAnswered = true
         if (typeof self.$refs.timerComponent !== 'undefined') {
           self.$refs.timerComponent.startTimer()
         }

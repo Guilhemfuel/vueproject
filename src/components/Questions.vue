@@ -4,7 +4,7 @@
     <div>
       <form v-on:submit.prevent="" v-on:change="userHasAnswered()" name="formQuestion">
         <div v-for="answers in getQuestions[getGame['currentQuestion']]['answers']" :key="answers.id">
-          <input :id="'answer_' + answers.id" type="radio" name="answers" class="input" :value="answers.id" v-model="checked">
+          <input :id="'answer_' + answers.id" type="radio" name="answers" class="input" :value="answers.id" v-model="checked" :disabled="disabled === true">
           <label :for="'answer_' + answers.id" v-bind:class="[{'correct' : (goodAnswer === answers.id)}, {'wrong' : (wrongAnswer === answers.id)}]">{{ answers.answer }}</label>
         </div>
       </form>
@@ -22,7 +22,8 @@ export default {
       userFingerprint: localStorage.getItem('fingerprint'),
       checked: false,
       goodAnswer: false,
-      wrongAnswer: false
+      wrongAnswer: false,
+      disabled: false
     }
   },
   methods: {
@@ -33,6 +34,7 @@ export default {
     },
     showGoodAnswer () {
       let self = this
+      this.disabled = true
       this.getQuestions[this.getGame['currentQuestion']]['answers'].forEach(function (element) {
         if (element.goodAnswer) {
           self.goodAnswer = element.id
@@ -46,6 +48,7 @@ export default {
       this.checked = false
       this.goodAnswer = false
       this.wrongAnswer = false
+      this.disabled = false
     }
   },
   computed: {
