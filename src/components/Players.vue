@@ -40,6 +40,7 @@ export default {
     margin-left: auto;
     margin-right: auto;
     text-align: left;
+    flex-grow: 1;
   }
 
   h4 {

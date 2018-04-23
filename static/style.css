@@ -1,21 +1,26 @@
-html {
-    background-color: #1d77a6;
-}
-
-body {
-    padding: 10px;
-    box-sizing: border-box;
-}
-
 html, body, #app {
     height: 100%;
     margin: 0;
 }
 
+html {
+  background-color: #1d77a6;
+}
+
+body {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
 .white {
-    color: white;
+  color: white;
 }
 
 .size-0-8em {
-    font-size: 0.8em;
+  font-size: 0.8em;
 }

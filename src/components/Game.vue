@@ -1,24 +1,31 @@
 <template>
   <div id="Game" v-if="getGame !== ''">
+    <popup v-if="showModal" @close="showModal = false"></popup>
     <transition name="fade">
       <div id="Player" v-if="getPlayer === false">
         <input-player></input-player>
       </div>
     </transition>
-    <p v-if="getOwner === true && getGame.isStarted === false" id="code-partage">
+    <p id="code-partage" v-if="getOwner === true && getGame.isStarted === false">
       <span id="code">{{ getGame.code }}</span>
       <br />
       <span>Partagez ce code à vos amis !</span><br />
-      <br />
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </p>
-    <div v-if="getGame.isStarted === true">
+    <div id="game-content" v-if="getGame.isStarted === true">
       <questions @status="triggerTimer()" ref="questionsComponent"></questions>
       <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
     </div>
-    <players></players>
-    <loader></loader>
-    <span class="white size-0-8em">En attente de joueurs...</span>
+    <div v-if="getGame.isStarted === true">
+      <div id="show-players" @click="showModal = true"><img src="./../assets/players.png"/></div>
+    </div>
+    <div v-else>
+      <players></players>
+      <div>
+        <loader></loader>
+        <span class="white size-0-8em">En attente de joueurs...</span>
+      </div>
+    </div>
   </div>
   <div class="errorMessage" v-else>
     {{ getErrorMessage }}
@@ -31,6 +38,7 @@ import Players from './Players.vue'
 import Questions from './Questions.vue'
 import Timer from './Timer.vue'
 import Loader from './Loader.vue'
+import Popup from './Popup.vue'
 import {mapGetters, mapActions} from 'vuex'
 import Fingerprint2 from 'fingerprintjs2'
 import Pusher from 'pusher-js'
@@ -45,12 +53,14 @@ export default {
     InputPlayer,
     Players,
     Timer,
-    Loader
+    Loader,
+    Popup
   },
   name: 'Game',
   data () {
     return {
-      time: 5
+      time: 5,
+      showModal: false
     }
   },
   methods: {
@@ -156,11 +166,30 @@ export default {
 </script>
 
 <style scoped>
+  #Game {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
+  }
+
+  #game-content {
+    flex-grow:1;
+  }
+
+  #show-players {
+    margin: 0 auto;
+    width: 10%;
+  }
+
+  #show-players img {
+    width: 100%;
   }
 
   #code-partage {

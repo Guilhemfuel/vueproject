@@ -75,6 +75,12 @@ export default {
 </script>
 
 <style scoped>
+  #Home {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   .input {
     border: none;
     border-bottom: 1px solid #383838;
