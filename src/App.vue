@@ -35,6 +35,8 @@ export default {
     font-size: 2.8em;
     text-decoration: none;
     height: 12%;
+    font-weight: 700;
+    font-style: italic;
   }
 
   .form {

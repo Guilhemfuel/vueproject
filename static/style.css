@@ -11,3 +11,11 @@ html, body, #app {
     height: 100%;
     margin: 0;
 }
+
+.white {
+    color: white;
+}
+
+.size-0-8em {
+    font-size: 0.8em;
+}

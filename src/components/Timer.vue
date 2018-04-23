@@ -68,4 +68,8 @@ export default {
   .c100:after {
     background-color: #1d77a6;
   }
+
+  .c100 span {
+    color: white;
+  }
 </style>

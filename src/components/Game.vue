@@ -5,8 +5,10 @@
         <input-player></input-player>
       </div>
     </transition>
-    <p v-if="getOwner === true && getGame.isStarted === false">
-      Partagez ce code : {{ getGame.code }}<br />
+    <p v-if="getOwner === true && getGame.isStarted === false" id="code-partage">
+      <span id="code">{{ getGame.code }}</span>
+      <br />
+      <span>Partagez ce code à vos amis !</span><br />
       <br />
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </p>
@@ -15,6 +17,8 @@
       <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
     </div>
     <players></players>
+    <loader></loader>
+    <span class="white size-0-8em">En attente de joueurs...</span>
   </div>
   <div class="errorMessage" v-else>
     {{ getErrorMessage }}
@@ -26,6 +30,7 @@ import InputPlayer from './InputPlayer.vue'
 import Players from './Players.vue'
 import Questions from './Questions.vue'
 import Timer from './Timer.vue'
+import Loader from './Loader.vue'
 import {mapGetters, mapActions} from 'vuex'
 import Fingerprint2 from 'fingerprintjs2'
 import Pusher from 'pusher-js'
@@ -39,7 +44,8 @@ export default {
     Questions,
     InputPlayer,
     Players,
-    Timer
+    Timer,
+    Loader
   },
   name: 'Game',
   data () {
@@ -155,6 +161,18 @@ export default {
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
+  }
+
+  #code-partage {
+    line-height: 2em;
+    color: white;
+  }
+
+  #code {
+    font-family: 'Montserrat', sans-serif;
+    color: #dd9d22;
+    font-weight: 600;
+    font-size: 2em;
   }
 
   button {

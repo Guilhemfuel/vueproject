@@ -1,9 +1,10 @@
 <template>
   <div id="Players">
+    <h4>Joueurs :</h4>
     <ul>
       <li v-for="player in getPlayers" :key="player.id">
-        <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }} - {{ player.score }}<span v-if="player.owner === true">🤢</span></p>
-        <p v-else>{{ player.name }} - {{ player.score }}<span v-if="player.owner === true">🤢</span></p>
+        <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }}</p>
+        <p v-else>{{ player.name }}</p>
       </li>
     </ul>
   </div>
@@ -34,8 +35,21 @@ export default {
 </script>
 
 <style scoped>
+  #Players {
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
+
+  h4 {
+    color: #383838;
+    text-align: center;
+  }
+
   ul {
     padding: 0;
+    line-height: 0.8em;
   }
 
   li {
@@ -43,6 +57,6 @@ export default {
   }
 
   .currentUser {
-    color: #42a2ff;
+    color: #cccccc;
   }
 </style>
