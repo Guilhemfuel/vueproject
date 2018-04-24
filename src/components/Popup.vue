@@ -1,11 +1,12 @@
 <template>
-  <div id="popup">
-    <transition name="modal">
-      <div class="modal-mask" @click="$emit('close')">
+  <transition name="modal">
+    <div id="Popup">
+      <div class="modal-shadow" @click="$emit('close')">
         <div class="modal-wrapper">
-          <div class="modal-container">
+          <div class="modal-container" @click.stop>
+            <div class="modal-close-button" @click="$emit('close')">×</div>
             <div class="modal-header">
-              <slot name="header">default header</slot>
+              <h4>Joueurs :</h4>
             </div>
             <div class="modal-body">
               <slot name="body">default body</slot>
@@ -13,8 +14,8 @@
           </div>
         </div>
       </div>
-    </transition>
-  </div>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -24,7 +25,7 @@ export default {
 </script>
 
 <style>
-  .modal-mask {
+  .modal-shadow {
     position: fixed;
     z-index: 9998;
     top: 0;
@@ -37,46 +38,58 @@ export default {
   }
 
   .modal-wrapper {
-      display: table-cell;
-      vertical-align: middle;
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .modal-container {
-      width: 300px;
-      margin: 0px auto;
-      padding: 20px 30px;
-      background-color: #383838;
-      color: white;
-      border-radius: 2px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-      transition: all .3s ease;
-      font-family: Helvetica, Arial, sans-serif;
+    max-width: 350px;
+    margin: 0px auto;
+    padding: 20px;
+    background-color: #383838;
+    color: white;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    transition: all .3s ease;
+    font-family: Helvetica, Arial, sans-serif;
   }
 
-  .modal-header h3 {
-      margin-top: 0;
-      color: #42b983;
+  .modal-close-button {
+    color: #ababab;
+    font-size: 1.6em;
+    position: relative;
+    top: -15px;
+    right: -10px;
+    float: right;
+    cursor: pointer;
+  }
+
+  .modal-header h4 {
+    margin-top: 0;
+    color: #717171;
   }
 
   .modal-body {
-      margin: 20px 0;
+    margin: 20px 0;
   }
 
   .modal-default-button {
-      float: right;
+    float: right;
   }
 
   .modal-enter {
-      opacity: 0;
+    opacity: 0;
   }
 
   .modal-leave-active {
-      opacity: 0;
+    opacity: 0;
   }
 
   .modal-enter .modal-container,
   .modal-leave-active .modal-container {
-      -webkit-transform: scale(1.1);
-      transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
   }
 </style>

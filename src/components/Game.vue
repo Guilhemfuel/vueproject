@@ -6,12 +6,12 @@
         <input-player></input-player>
       </div>
     </transition>
-    <p id="code-partage" v-if="getOwner === true && getGame.isStarted === false">
+    <div id="code-partage" v-if="getOwner === true && getGame.isStarted === false">
       <span id="code">{{ getGame.code }}</span>
       <br />
       <span>Partagez ce code à vos amis !</span><br />
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
-    </p>
+    </div>
     <div id="game-content" v-if="getGame.isStarted === true">
       <questions @status="triggerTimer()" ref="questionsComponent"></questions>
       <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
