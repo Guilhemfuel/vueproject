@@ -47,7 +47,7 @@ export default {
   .modal-container {
     max-width: 350px;
     margin: 0px auto;
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     background-color: #383838;
     color: white;
     border-radius: 2px;
@@ -60,9 +60,10 @@ export default {
     color: #ababab;
     font-size: 1.6em;
     position: relative;
-    top: -15px;
-    right: -10px;
-    float: right;
+    height: 20px;
+    top: 0;
+    right: -15px;
+    text-align: right;
     cursor: pointer;
   }
 
