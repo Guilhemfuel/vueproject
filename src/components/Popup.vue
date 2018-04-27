@@ -9,7 +9,12 @@
               <h4>Joueurs :</h4>
             </div>
             <div class="modal-body">
-              <slot name="body">default body</slot>
+              <ul>
+                <li v-for="player in getPlayers" :key="player.id">
+                  <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }} - {{ player.score }}</p>
+                  <p v-else>{{ player.name }} - {{ player.score }}</p>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -19,8 +24,18 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
-  name: 'Popup'
+  name: 'Popup',
+  data () {
+    return {}
+  },
+  computed: {
+    ...mapGetters({
+      getPlayers: 'game/getPlayers'
+    })
+  }
 }
 </script>
 
@@ -92,5 +107,13 @@ export default {
   .modal-leave-active .modal-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
+  }
+
+  .modal-body ul {
+    padding: 0;
+  }
+
+  .modal-body ul li {
+    list-style: none;
   }
 </style>
