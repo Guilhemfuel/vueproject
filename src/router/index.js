@@ -6,7 +6,7 @@ import Game from '@/components/Game'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  mode: 'hash',
   routes: [
     { path: '/', name: 'Home', component: Home },
     { path: '/:code', name: 'Game', component: Game }
