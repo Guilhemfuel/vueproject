@@ -12,18 +12,22 @@
       <span>Partagez ce code à vos amis !</span><br />
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </div>
-    <div id="game-content" v-if="getGame.isStarted === true">
+    <div id="game-content" v-if="getGame.isStarted === true && getIdPlayer">
       <questions @status="triggerTimer()" ref="questionsComponent"></questions>
       <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
-    </div>
-    <div v-if="getGame.isStarted === true">
-      <div id="show-players" @click="showModal = true"><img src="./../assets/players.png"/></div>
+      <div>
+        <div id="show-players" @click="showModal = true"><img src="./../assets/players.png"/></div>
+      </div>
     </div>
     <div v-else>
       <players></players>
-      <div>
+      <div v-if="getGame.isStarted === false">
         <loader></loader>
         <span class="white size-0-8em">En attente de joueurs...</span>
+      </div>
+      <div v-else>
+        <loader></loader>
+        <span class="white size-0-8em">Partie en cours, mettez un pseudo pour rejoindre...</span>
       </div>
     </div>
   </div>
