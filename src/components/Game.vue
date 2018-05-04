@@ -1,6 +1,9 @@
 <template>
   <div id="Game" v-if="getGame !== ''">
-    <popup v-if="showModal" @close="showModal = false"></popup>
+    <popup v-if="showModal" @close="showModal = false">
+      <slot slot="title">Joueurs</slot>
+      <p slot="content"></p>
+    </popup>
     <transition name="fade">
       <div id="Player" v-if="getPlayer === false">
         <input-player></input-player>
@@ -13,8 +16,10 @@
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </div>
     <div id="game-content" v-if="getGame.isStarted === true && getIdPlayer">
-      <questions @status="triggerTimer()" ref="questionsComponent"></questions>
-      <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
+      <div id="content-questions">
+        <questions @status="triggerTimer()" ref="questionsComponent"></questions>
+        <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
+      </div>
       <div>
         <div id="show-players" @click="showModal = true"><img src="./../assets/players.png"/></div>
       </div>
@@ -190,7 +195,13 @@ export default {
   }
 
   #game-content {
-    flex-grow:1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  #content-questions {
+    flex-grow: 1;
   }
 
   #show-players {

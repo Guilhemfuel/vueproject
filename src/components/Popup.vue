@@ -6,9 +6,10 @@
           <div class="modal-container" @click.stop>
             <div class="modal-close-button" @click="$emit('close')">×</div>
             <div class="modal-header">
-              <h4>Joueurs :</h4>
+              <h4><slot name="title"></slot> :</h4>
             </div>
             <div class="modal-body">
+              <slot name="content"></slot>
               <ul>
                 <li v-for="player in getPlayers" :key="player.id">
                   <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }} - {{ player.score }}</p>
