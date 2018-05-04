@@ -28,7 +28,13 @@
     </div>
   </div>
   <div class="errorMessage" v-else>
-    {{ getErrorMessage }}
+    <div v-if="getErrorMessage === ''">
+      <loader></loader>
+      <span class="white size-0-8em">Chargement de la partie...</span>
+    </div>
+    <div v-else>
+      {{ getErrorMessage }}
+    </div>
   </div>
 </template>
 
@@ -219,5 +225,12 @@ export default {
 
   .active:hover {
     color: white;
+  }
+
+  .errorMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
   }
 </style>
