@@ -96,7 +96,7 @@ export default {
       // On declenche le timer à chaque fois qu'un joueur est le premier à répondre
       axios(api + '/game/startTimer/' + this.getGame.code)
     },
-    endTimer: function (value) {
+    endTimer () {
       // On soumet la réponse à l'API
       this.submitAnswer(this.$refs.questionsComponent.checked)
       // On affiche la bonne réponse
