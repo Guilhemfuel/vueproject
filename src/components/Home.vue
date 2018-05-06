@@ -49,9 +49,6 @@ export default {
     })
   },
   watch: {
-    inputvalue: function (value) {
-      this.inputvalue = value.toUpperCase()
-    },
     getIfGameExist () {
       if (this.getIfGameExist) {
         this.$router.push({name: 'Game', params: {code: this.inputvalue}})
