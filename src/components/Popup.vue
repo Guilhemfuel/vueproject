@@ -30,7 +30,9 @@ import {mapGetters} from 'vuex'
 export default {
   name: 'Popup',
   data () {
-    return {}
+    return {
+      userFingerprint: localStorage.getItem('fingerprint')
+    }
   },
   computed: {
     ...mapGetters({
@@ -116,5 +118,9 @@ export default {
 
   .modal-body ul li {
     list-style: none;
+  }
+
+  .currentUser {
+    color: #1d77a6;
   }
 </style>

@@ -81,6 +81,8 @@ const actions = {
               setTimeout(function () { axios(api + '/refreshGame/' + context.getters.getGame.code) }, 5000)
             })
           }
+        } else {
+          window.localStorage.removeItem('owner')
         }
       })
       .catch(error => {
