@@ -51,7 +51,7 @@ export default {
   watch: {
     getIfGameExist () {
       if (this.getIfGameExist) {
-        this.$router.push({name: 'Game', params: {code: this.inputvalue}})
+        this.$router.push({name: 'Game', params: {code: this.inputvalue.toUpperCase()}})
       }
     }
   },
