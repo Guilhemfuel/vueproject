@@ -76,11 +76,13 @@ const actions = {
         if (localStorage.getItem('owner') === data) {
           context.commit('mutateOwner', true)
           // Si l'owner a quitté la partie ou refresh la page et que quelqu'un a déjà répondu on relance l'execution
+          /*
           if (context.getters.getGame.timerIsStarted) {
             axios.get(api + '/game/nextQuestion/' + context.getters.getGame.code).then(response => {
               setTimeout(function () { axios(api + '/refreshGame/' + context.getters.getGame.code) }, 5000)
             })
           }
+          */
         } else {
           window.localStorage.removeItem('owner')
         }
