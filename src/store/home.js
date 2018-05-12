@@ -30,7 +30,7 @@ const mutations = {
 
 const actions = {
   setData (context, data) {
-    axios.get(api + '/game/' + data)
+    axios.get(api + '/game/' + data.toUpperCase())
       .then(response => {
         context.commit('mutateIfGameExist', true)
       })

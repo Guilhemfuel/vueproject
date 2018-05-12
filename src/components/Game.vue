@@ -150,7 +150,7 @@ export default {
       self.checkIfUserAlreadyInGame(data) // On check si l'utilisateur était dans une autre partie
     })
     // Instantiate the game
-    this.initGame(this.$route.params.code)
+    this.initGame(this.$route.params.code.toUpperCase())
   },
   mounted () {
     let self = this
