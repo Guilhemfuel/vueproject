@@ -146,7 +146,7 @@ export default {
 
       self.setFingerprint(localStorage.getItem('fingerprint')) // On set le fingerprint dans le store
 
-      let data = {fingerprint: self.getFingerprint, code: self.$route.params.code}
+      let data = {fingerprint: self.getFingerprint, code: self.$route.params.code.toUpperCase()}
       self.checkIfUserAlreadyInGame(data) // On check si l'utilisateur était dans une autre partie
     })
     // Instantiate the game
@@ -159,7 +159,7 @@ export default {
       cluster: 'eu'
     })
 
-    let channel = pusher.subscribe(this.$route.params.code)
+    let channel = pusher.subscribe(this.$route.params.code.toUpperCase())
     channel.bind('game', function (data) {
       if (typeof self.$refs.timerComponent !== 'undefined') {
         self.$refs.timerComponent.resetComponent()
