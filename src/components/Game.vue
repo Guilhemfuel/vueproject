@@ -209,6 +209,10 @@ export default {
     width: 10%;
   }
 
+  #show-players:hover {
+    cursor: pointer;
+  }
+
   #show-players img {
     width: 100%;
   }

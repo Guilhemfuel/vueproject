@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-link :to="{ name: 'Home' }" id="link-logo"><div id="logo">QuizForFun</div></router-link>
+    <div id="logo">QuizForFun</div>
     <router-view/>
   </div>
 </template>

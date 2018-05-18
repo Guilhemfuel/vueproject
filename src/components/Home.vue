@@ -1,21 +1,27 @@
 <template>
   <div id="Home">
-    <form v-on:submit.prevent="" name="formGame">
-      <input type="text" class="input" maxlength="4" v-model="inputvalue" placeholder="CODE PARTIE">
-      <SubmitForm v-on:click.native="setData(inputvalue)"></SubmitForm>
-    </form>
-    <p>{{ getData }}</p>
-    <div id="currentGame" v-if="getIfAlreadyInGame">
-      Vous êtes actuellement en cours de partie :<br />
-      <router-link :to="{ name: 'Game', params: { code: getIfAlreadyInGame }}">
-        <button type="button">Rejoindre</button>
-      </router-link>
-    </div>
-    <br />
-    <div id="newGame">
-      <form v-on:submit.prevent="" name="newGame">
-        <button type="button" v-on:click="newGame">Nouvelle partie</button>
+    <div id="container">
+      <form v-on:submit.prevent="" name="formGame">
+        <input type="text" class="input" maxlength="4" v-model="inputvalue" placeholder="CODE PARTIE">
+        <SubmitForm v-on:click.native="setData(inputvalue)"></SubmitForm>
       </form>
+      <p>{{ getData }}</p>
+      <div id="currentGame" v-if="getIfAlreadyInGame">
+        Vous êtes actuellement en cours de partie :<br />
+        <router-link :to="{ name: 'Game', params: { code: getIfAlreadyInGame }}">
+          <button type="button">Rejoindre</button>
+        </router-link>
+      </div>
+      <br />
+      <div id="newGame">
+        <form v-on:submit.prevent="" name="newGame">
+          <button type="button" v-on:click="newGame">Nouvelle partie</button>
+        </form>
+      </div>
+    </div>
+    <div id="android" v-if="isNotWebView">
+      Téléchargez l'application Android !<br />
+      <a href="" download="QuizForFunAndroid"><img src="./../assets/android-logo.png"/></a>
     </div>
   </div>
 </template>
@@ -28,7 +34,8 @@ import Fingerprint2 from 'fingerprintjs2'
 export default {
   data () {
     return {
-      inputvalue: ''
+      inputvalue: '',
+      isNotWebView: window.location.hostname
     }
   },
   components: {
@@ -78,6 +85,10 @@ export default {
     height: 100%;
   }
 
+  #container {
+    flex-grow: 1;
+  }
+
   .input {
     border: none;
     border-bottom: 1px solid #383838;
@@ -106,5 +117,16 @@ export default {
 
   button:hover {
     color: white;
+  }
+
+  #android {
+    margin: 0 auto;
+    width: 100%;
+    color: white;
+  }
+
+  #android img {
+    margin-top: 10px;
+    width: 10%;
   }
 </style>
