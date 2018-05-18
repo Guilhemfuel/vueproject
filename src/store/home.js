@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from './../router'
 import config from '../config'
 
-const api = config.dev
+const api = config.prod
 
 const state = {
   data: '',

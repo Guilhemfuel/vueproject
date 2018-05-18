@@ -60,7 +60,7 @@ import Pusher from 'pusher-js'
 import axios from 'axios'
 import config from '../config'
 
-const api = config.dev
+const api = config.prod
 
 export default {
   components: {
@@ -101,13 +101,6 @@ export default {
       this.submitAnswer(this.$refs.questionsComponent.checked)
       // On affiche la bonne réponse
       this.$refs.questionsComponent.showGoodAnswer()
-      // Code a executer après la fin du Timer seulement pour le créateur de la partie
-      if (this.getOwner) {
-        axios.get(api + '/game/nextQuestion/' + this.getGame.code)
-          .then(response => {
-            setTimeout(this.refreshGame, 5000)
-          })
-      }
     },
     submitAnswer (question) {
       axios.get(api + '/game/submitAnswer/' + this.getIdPlayer + '/' + question)
