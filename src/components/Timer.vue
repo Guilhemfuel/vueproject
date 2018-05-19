@@ -48,6 +48,7 @@ export default {
       }
     },
     resetComponent () {
+      clearInterval(this.intervalCircle)
       this.counter = this.timer
       this.timeCircle = 100
       this.intervalCounter = 0
