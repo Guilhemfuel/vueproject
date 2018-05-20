@@ -19,9 +19,9 @@
         </form>
       </div>
     </div>
-    <div id="android" v-if="isNotWebView">
+    <div id="android" v-if="!isWebView">
       Téléchargez l'application Android !<br />
-      <a href="" download="QuizForFunAndroid"><img src="./../assets/android-logo.png"/></a>
+      <a href="http://api.quizforfun.fr/downloadApp" download="QuizForFunAndroid"><img src="./../assets/android-logo.png"/></a>
     </div>
   </div>
 </template>
@@ -30,12 +30,16 @@
 import SubmitForm from './Submit.vue'
 import {mapGetters, mapActions} from 'vuex'
 import Fingerprint2 from 'fingerprintjs2'
+import axios from 'axios'
+import config from '../config'
+
+const api = config.prod
 
 export default {
   data () {
     return {
       inputvalue: '',
-      isNotWebView: window.location.hostname
+      isWebView: null
     }
   },
   components: {
@@ -73,6 +77,12 @@ export default {
       self.checkIfUserAlreadyInGame(localStorage.getItem('fingerprint')) // On check si l'utilisateur était dans une autre partie
       console.log('fingerprint ' + localStorage.getItem('fingerprint'))
     })
+
+    axios.get(api + '/iswebview')
+      .then(response => {
+        console.log(response.data.webview)
+        this.isWebView = response.data.webview
+      })
   },
   name: 'Home'
 }
