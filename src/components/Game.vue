@@ -122,7 +122,9 @@ export default {
     },
     exitGame () {
       axios.delete(api + '/player/remove/' + this.getIdPlayer)
-      window.location.replace('/')
+        .then(response => {
+          window.location.replace('/')
+        })
     }
   },
   computed: {
