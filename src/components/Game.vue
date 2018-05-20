@@ -84,7 +84,8 @@ export default {
     return {
       time: 5,
       showModal: false,
-      showModalExit: false
+      showModalExit: false,
+      isPending: false
     }
   },
   methods: {
@@ -102,8 +103,14 @@ export default {
         })
     },
     triggerTimer () {
-      // On declenche le timer à chaque fois qu'un joueur est le premier à répondre
-      axios(api + '/game/startTimer/' + this.getGame.code)
+      // On déclenche le timer à chaque fois qu'un joueur est le premier à répondre
+      if (!this.isPending) {
+        this.isPending = true
+        axios(api + '/game/startTimer/' + this.getGame.code + '/' + this.getIdPlayer)
+          .then(() => {
+            this.isPending = false
+          })
+      }
     },
     endTimer () {
       // On soumet la réponse à l'API
@@ -179,6 +186,9 @@ export default {
 
     channel.bind('timer', (data) => {
       if (data) {
+        if (data.message) {
+          console.log(data.message)
+        }
         if (typeof self.$refs.timerComponent !== 'undefined') {
           self.$refs.timerComponent.startTimer()
         }

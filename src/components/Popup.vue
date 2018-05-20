@@ -12,8 +12,8 @@
               <slot name="content"></slot>
               <ul>
                 <li v-for="player in getPlayers" :key="player.id">
-                  <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }} - {{ player.score }}</p>
-                  <p v-else>{{ player.name }} - {{ player.score }}</p>
+                  <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }} : {{ player.score }}</p>
+                  <p v-else>{{ player.name }} : {{ player.score }}</p>
                 </li>
               </ul>
             </div>
