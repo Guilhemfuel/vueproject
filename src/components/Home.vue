@@ -80,7 +80,6 @@ export default {
 
     axios.get(api + '/iswebview')
       .then(response => {
-        console.log(response.data.webview)
         this.isWebView = response.data.webview
       })
   },
@@ -96,7 +95,7 @@ export default {
   }
 
   #container {
-    flex-grow: 1;
+    flex-grow: 0.9;
   }
 
   .input {
@@ -137,6 +136,6 @@ export default {
 
   #android img {
     margin-top: 10px;
-    width: 10%;
+    width: 50px;
   }
 </style>

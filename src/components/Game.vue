@@ -4,6 +4,10 @@
       <slot slot="title">Joueurs</slot>
       <p slot="content"></p>
     </popup>
+    <popup-exit v-if="showModalExit" @close="showModalExit = false" @exit="exitGame()">
+      <slot slot="title">Voulez-vous quitter la partie ?</slot>
+      <p slot="content"></p>
+    </popup-exit>
     <transition name="fade">
       <div id="Player" v-if="getPlayer === false">
         <input-player></input-player>
@@ -20,8 +24,10 @@
         <questions @status="triggerTimer()" ref="questionsComponent"></questions>
         <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
       </div>
-      <div>
+      <div id="footer-icon">
+        <div></div>
         <div id="show-players" @click="showModal = true"><img src="./../assets/players.png"/></div>
+        <div id="exit" @click="showModalExit = true"><img src="./../assets/exit.png"/></div>
       </div>
     </div>
     <div v-else>
@@ -59,6 +65,7 @@ import Fingerprint2 from 'fingerprintjs2'
 import Pusher from 'pusher-js'
 import axios from 'axios'
 import config from '../config'
+import PopupExit from './PopupExit.vue'
 
 const api = config.prod
 
@@ -69,13 +76,15 @@ export default {
     Players,
     Timer,
     Loader,
-    Popup
+    Popup,
+    PopupExit
   },
   name: 'Game',
   data () {
     return {
       time: 5,
-      showModal: false
+      showModal: false,
+      showModalExit: false
     }
   },
   methods: {
@@ -110,6 +119,10 @@ export default {
     },
     refreshGame () {
       axios(api + '/refreshGame/' + this.getGame.code)
+    },
+    exitGame () {
+      axios.delete(api + '/player/remove/' + this.getIdPlayer)
+      window.location.replace('/')
     }
   },
   computed: {
@@ -197,17 +210,36 @@ export default {
     flex-grow: 1;
   }
 
-  #show-players {
-    margin: 0 auto;
-    width: 10%;
-  }
-
-  #show-players:hover {
-    cursor: pointer;
-  }
-
-  #show-players img {
+  #footer-icon {
+    max-width: 350px;
     width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #footer-icon div:nth-child(1), #footer-icon div:nth-child(3){
+    width: 30px;
+    max-width: 50px;
+  }
+
+  #footer-icon div:nth-child(2) {
+    width: 50px;
+    max-width: 80px;
+  }
+
+  #footer-icon img {
+    width: 100%;
+  }
+
+  #show-players {
+    display: inline-block;
+    margin: 0 auto;
+  }
+
+  #show-players:hover, #exit:hover {
+    cursor: pointer;
   }
 
   #code-partage {

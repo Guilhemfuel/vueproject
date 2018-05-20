@@ -9,13 +9,8 @@
               <h4><slot name="title"></slot> :</h4>
             </div>
             <div class="modal-body">
-              <slot name="content"></slot>
-              <ul>
-                <li v-for="player in getPlayers" :key="player.id">
-                  <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }} - {{ player.score }}</p>
-                  <p v-else>{{ player.name }} - {{ player.score }}</p>
-                </li>
-              </ul>
+              <span @click="$emit('exit')">Oui</span>
+              <span @click="$emit('close')">Non</span>
             </div>
           </div>
         </div>
@@ -28,16 +23,12 @@
 import {mapGetters} from 'vuex'
 
 export default {
-  name: 'Popup',
+  name: 'PopupExit',
   data () {
-    return {
-      userFingerprint: localStorage.getItem('fingerprint')
-    }
+    return {}
   },
   computed: {
-    ...mapGetters({
-      getPlayers: 'game/getPlayers'
-    })
+    ...mapGetters({})
   }
 }
 </script>
@@ -53,7 +44,6 @@ export default {
     background-color: rgba(0, 0, 0, .5);
     display: table;
     transition: opacity .3s ease;
-    -webkit-transition: opacity .3s ease;
   }
 
   .modal-wrapper {
@@ -72,7 +62,6 @@ export default {
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     transition: all .3s ease;
-    -webkit-transition: all .3s ease;
     font-family: Helvetica, Arial, sans-serif;
   }
 
@@ -89,7 +78,7 @@ export default {
 
   .modal-header h4 {
     margin-top: 0;
-    color: #717171;
+    color: white;
   }
 
   .modal-body {
@@ -114,15 +103,16 @@ export default {
     transform: scale(1.1);
   }
 
-  .modal-body ul {
-    padding: 0;
+  .modal-body {
+    display: flex;
+    justify-content: space-around;
   }
 
-  .modal-body ul li {
-    list-style: none;
-  }
-
-  .currentUser {
+  .modal-body span {
     color: #1d77a6;
+  }
+
+  .modal-body span:hover {
+    cursor: pointer;
   }
 </style>
