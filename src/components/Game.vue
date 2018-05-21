@@ -151,7 +151,7 @@ export default {
           } else {
             this.notificationCss = 'red'
           }
-          setTimeout(function () { self.notification = false }, 1500)
+          setTimeout(function () { self.notification = false; self.notificationCss = false }, 1500)
         })
     },
     refreshGame () {
