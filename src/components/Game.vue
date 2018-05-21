@@ -23,6 +23,9 @@
       <div id="content-questions">
         <questions @status="triggerTimer()" ref="questionsComponent"></questions>
         <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
+        <transition name="slide-fade">
+          <div id="notification" v-if="notification" :class="notificationCss">{{ notification }}</div>
+        </transition>
       </div>
       <div class="footer-icon">
         <div></div>
@@ -102,7 +105,9 @@ export default {
       time: 5,
       showModal: false,
       showModalExit: false,
-      isPending: false
+      isPending: false,
+      notification: false,
+      notificationCss: false
     }
   },
   methods: {
@@ -136,9 +141,17 @@ export default {
       this.$refs.questionsComponent.showGoodAnswer()
     },
     submitAnswer (question) {
+      let self = this
       axios.get(api + '/game/submitAnswer/' + this.getIdPlayer + '/' + question)
         .then(response => {
-          console.log(response)
+          console.log(response.data)
+          this.notification = response.data.message
+          if (response.data.answer) {
+            this.notificationCss = 'green'
+          } else {
+            this.notificationCss = 'red'
+          }
+          setTimeout(function () { self.notification = false }, 1500)
         })
     },
     refreshGame () {
@@ -209,6 +222,8 @@ export default {
       if (data) {
         if (data.message) {
           console.log(data.message)
+          this.notification = data.message
+          setTimeout(function () { self.notification = false }, 1500)
         }
         if (typeof self.$refs.timerComponent !== 'undefined') {
           self.$refs.timerComponent.startTimer()
@@ -229,7 +244,18 @@ export default {
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
   }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .slide-fade-enter, .slide-fade-leave-to {
+    transform: translateX(10px);
     opacity: 0;
   }
 
@@ -341,5 +367,11 @@ export default {
     align-items: center;
     justify-content: center;
     flex-grow: 1;
+  }
+
+  #notification {
+    margin: 10px auto;
+    color: #dd9d22;
+    font-weight: bold;
   }
 </style>
