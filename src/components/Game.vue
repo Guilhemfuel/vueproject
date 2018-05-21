@@ -9,25 +9,41 @@
       <p slot="content"></p>
     </popup-exit>
     <transition name="fade">
-      <div id="Player" v-if="getPlayer === false">
+      <div id="Player" v-if="getPlayer === false && !getGame.isFinished">
         <input-player></input-player>
       </div>
     </transition>
     <div id="code-partage" v-if="getOwner === true && getGame.isStarted === false">
-      <span id="code">{{ getGame.code }}</span>
+      <span class="code">{{ getGame.code }}</span>
       <br />
       <span>Partagez ce code à vos amis !</span><br />
       <button type="button" v-on:click="startGame" v-bind:class="{ active: readyToStart }" v-bind:disabled="!readyToStart">Lancer la partie !</button>
     </div>
-    <div id="game-content" v-if="getGame.isStarted === true && getIdPlayer">
+    <div id="game-content" v-if="getGame.isStarted === true && getIdPlayer && !getGame.isFinished">
       <div id="content-questions">
         <questions @status="triggerTimer()" ref="questionsComponent"></questions>
         <timer :timer="time" @status="endTimer(true)" ref="timerComponent"></timer>
       </div>
-      <div id="footer-icon">
+      <div class="footer-icon">
         <div></div>
-        <div id="show-players" @click="showModal = true"><img src="./../assets/players.png"/></div>
-        <div id="exit" @click="showModalExit = true"><img src="./../assets/exit.png"/></div>
+        <div class="show-players" @click="showModal = true"><img src="./../assets/players.png"/></div>
+        <div class="exit" @click="showModalExit = true"><img src="./../assets/exit.png"/></div>
+      </div>
+    </div>
+    <div id="scoreboard" v-else-if="getGame.isFinished === true">
+      <div style="flex-grow: 1;">
+        <span class="code">Partie Terminée !</span>
+        <div class="scores"><img src="./../assets/trophy.png"/></div>
+        <ul>
+          <li v-for="(player) in orderPlayers" :key="player.id">
+            <p><span>{{ player.name }}</span><span>{{ player.score }}</span></p>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-icon">
+        <div></div>
+        <div class="show-players" @click="showModal = true"><img src="./../assets/players.png"/></div>
+        <div class="exit" @click="showModalExit = true"><img src="./../assets/exit.png"/></div>
       </div>
     </div>
     <div v-else>
@@ -66,6 +82,7 @@ import Pusher from 'pusher-js'
 import axios from 'axios'
 import config from '../config'
 import PopupExit from './PopupExit.vue'
+import _ from 'lodash'
 
 const api = config.prod
 
@@ -138,6 +155,7 @@ export default {
     ...mapGetters({
       getGame: 'game/getGame',
       getPlayer: 'game/getPlayer',
+      getPlayers: 'game/getPlayers',
       getQuestions: 'game/getQuestions',
       getOwner: 'game/getOwner',
       getErrorMessage: 'game/getErrorMessage',
@@ -149,6 +167,9 @@ export default {
       if (this.getGame.players.length >= this.getGame.nbPlayerMin) {
         return true
       }
+    },
+    orderPlayers: function () {
+      return _.orderBy(this.getPlayers, ['score', player => player.name.toLowerCase()], ['desc', 'asc'])
     }
   },
   created () {
@@ -222,7 +243,7 @@ export default {
     flex-grow: 1;
   }
 
-  #footer-icon {
+  .footer-icon {
     max-width: 350px;
     width: 100%;
     margin: 0 auto;
@@ -231,26 +252,26 @@ export default {
     align-items: center;
   }
 
-  #footer-icon div:nth-child(1), #footer-icon div:nth-child(3){
+  .footer-icon div:nth-child(1), .footer-icon div:nth-child(3){
     width: 30px;
     max-width: 50px;
   }
 
-  #footer-icon div:nth-child(2) {
+  .footer-icon div:nth-child(2) {
     width: 50px;
     max-width: 80px;
   }
 
-  #footer-icon img {
+  .footer-icon img {
     width: 100%;
   }
 
-  #show-players {
+  .show-players {
     display: inline-block;
     margin: 0 auto;
   }
 
-  #show-players:hover, #exit:hover {
+  .show-players:hover, .exit:hover {
     cursor: pointer;
   }
 
@@ -259,11 +280,43 @@ export default {
     color: white;
   }
 
-  #code {
+  .code {
     font-family: 'Montserrat', sans-serif;
     color: #dd9d22;
     font-weight: 600;
     font-size: 2em;
+  }
+
+  #scoreboard {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  #scoreboard p {
+    display: flex;
+    justify-content: space-between;
+    width: 250px;
+    margin: 10px auto;
+  }
+
+  #scoreboard ul {
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  #scoreboard li {
+    text-decoration: none;
+    list-style-type: none;
+    color: white;
+  }
+
+  #scoreboard .scores img {
+    width: 50px;
+  }
+
+  .scores {
+    margin: 20px 0;
   }
 
   button {

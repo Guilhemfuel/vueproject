@@ -11,7 +11,7 @@
             <div class="modal-body">
               <slot name="content"></slot>
               <ul>
-                <li v-for="player in getPlayers" :key="player.id">
+                <li v-for="player in orderPlayers" :key="player.id">
                   <p v-if="player.fingerprint === userFingerprint" class="currentUser">{{ player.name }} : {{ player.score }}</p>
                   <p v-else>{{ player.name }} : {{ player.score }}</p>
                 </li>
@@ -26,6 +26,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import _ from 'lodash'
 
 export default {
   name: 'Popup',
@@ -37,7 +38,10 @@ export default {
   computed: {
     ...mapGetters({
       getPlayers: 'game/getPlayers'
-    })
+    }),
+    orderPlayers: function () {
+      return _.orderBy(this.getPlayers, ['score', player => player.name.toLowerCase()], ['desc', 'asc'])
+    }
   }
 }
 </script>
